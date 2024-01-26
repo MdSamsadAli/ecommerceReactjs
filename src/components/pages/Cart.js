@@ -7,6 +7,7 @@ import {
   removeItem,
   updateQuantity,
 } from "../../redux/cartSlice";
+import StripeCheckout from "react-stripe-checkout";
 
 export default function Cart() {
   const dispatch = useDispatch();
@@ -36,6 +37,14 @@ export default function Cart() {
   const emptyCartMsg = (
     <h4 className="container text-center p-4">Your Cart is Empty</h4>
   );
+
+  const publishableKey =
+    "pk_test_51OcmIbCxCPSowgrvLVfa9jUamXTHsITT2UNGG7Ojx60KkvMcQakUBVZtKgzE5TmXMJAlarNwxuzFQ4e0r7ZNcGrW00dnVF5R6o";
+
+  const onToken = (token) => {
+    // Handle the token (send it to your server for further processing)
+    console.log(token);
+  };
   return (
     <>
       <Heading title="Cart" subtitle="Home" heading="Cart" />
@@ -150,12 +159,21 @@ export default function Cart() {
                     <h5 className="mb-0 ps-4 me-4">Total</h5>
                     <p className="mb-0 pe-4">$ {totalAmount + deliverCharge}</p>
                   </div>
-                  <button
+                  {/*  <button
                     className="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4"
                     type="button"
                   >
                     Proceed Checkout
-                  </button>
+                  </button> */}
+                  <StripeCheckout
+                    token={onToken}
+                    stripeKey={publishableKey}
+                    amount={100 * totalAmount} // Amount in cents
+                    name="MD"
+                    currency="USD"
+                    label="Proceed Checkout"
+                    className="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4"
+                  />
                 </div>
               </div>
             </div>
